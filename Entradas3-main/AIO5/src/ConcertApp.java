@@ -295,9 +295,19 @@ public class ConcertApp {
 
     }
 
-    public void run() {
-        loadDefaultConcerts();
+    private void loadDefaultUsers() {
+        // Agregar información a los usuarios previamente cargados (admin y cliente)
+        User adminUser = new User(ADMIN_USERNAME, ADMIN_PASSWORD, "admin@example.com", "123456789");
+        users.put(ADMIN_USERNAME, adminUser);
 
+        User clientUser = new User(CLIENT_USERNAME, CLIENT_PASSWORD, "cliente@example.com", "987654321");
+        users.put(CLIENT_USERNAME, clientUser);
+    }
+
+    public void run() {
+
+        loadDefaultConcerts();
+        loadDefaultUsers();
         while (true) {
             System.out.println("=== Menú Principal ===");
             System.out.println("1. Login");
@@ -492,9 +502,9 @@ public class ConcertApp {
         for (int i = 0; i < concerts.size(); i++) {
             Concert concert = concerts.get(i);
             String concertName = concert.getName();
-    
+
             System.out.println("Concierto: " + concertName);
-    
+
             for (TicketSale ticketSale : concert.getTicketSales()) {
                 String username = ticketSale.getUsername();
                 User user = users.get(username); // Obtenemos el objeto User del mapa users
@@ -505,7 +515,7 @@ public class ConcertApp {
                 String paymentMethod = ticketSale.getPaymentMethod();
                 String phoneNumber = user.getPhoneNumber(); // Obtenemos el número de teléfono del usuario
                 String email = user.getEmail(); // Obtenemos el correo electrónico del usuario
-    
+
                 System.out.println("Usuario: " + username);
                 System.out.println("Número de teléfono: " + phoneNumber); // Mostramos el número de teléfono del usuario
                 System.out.println("Correo electrónico: " + email); // Mostramos el correo electrónico del usuario
@@ -515,13 +525,12 @@ public class ConcertApp {
                 System.out.println("Método de Pago: " + paymentMethod);
                 System.out.println("-----------------------------");
             }
-    
+
             if (concert.getTicketSales().isEmpty()) {
                 System.out.println("No se han realizado ventas para este concierto.");
             }
         }
     }
-    
 
     private double getPriceForSection(Concert concert, String sectionName) {
         for (Section section : concert.getSections()) {
